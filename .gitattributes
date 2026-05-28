@@ -1,0 +1,4 @@
+# Exclude auto-generated pipeline outputs and HTML reports from language statistics
+out/** linguist-vendored
+out/** linguist-documentation
+out/** linguist-generated

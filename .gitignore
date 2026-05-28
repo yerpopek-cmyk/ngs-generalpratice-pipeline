@@ -1,0 +1,30 @@
+# Ignore large raw data and binary files
+fastq/
+reference/
+tmp/
+*.fastq
+*.bam
+*.ubam
+*.bai
+*.gz
+*.tbi
+*.vcf
+test.fastq
+
+# Ignore logs and runtime states
+.checkpoints/
+control/
+logs/
+.agents/
+.codex/
+out/
+tmp/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Windows alternate data stream files
+*:Zone.Identifier
+*Zone.Identifier
+*Zone.Identifier*

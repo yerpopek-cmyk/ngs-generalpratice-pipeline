@@ -1,0 +1,4 @@
+sample_id	sex	relationship	haplogroup_Y	haplogroup_MT
+SAMPLE_001	M	probant	R1b1a2	H1
+SAMPLE_002	M	father	R1b1a2	H1
+SAMPLE_003	M	unrelated	I2a1b	U5b
