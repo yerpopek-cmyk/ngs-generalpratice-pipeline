@@ -17,7 +17,6 @@ control/
 logs/
 .agents/
 .codex/
-out/
 tmp/
 
 # Python cache
