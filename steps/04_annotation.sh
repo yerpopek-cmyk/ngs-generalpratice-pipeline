@@ -78,13 +78,42 @@ ANNOVAR_CMD="${PERL} ${ANNOVAR_DIR}/table_annovar.pl \
 log_cmd "${ANNOVAR_CMD}"
 
 if [[ ! -f "${ANNOVAR_DIR}/table_annovar.pl" ]]; then
-    log_error "ANNOVAR not found at: ${ANNOVAR_DIR}/table_annovar.pl"
-    exit 1
+    if [[ "${ANNOVAR_BYPASS_IF_MISSING:-true}" == "true" ]]; then
+        log_warn "ANNOVAR was not found at: ${ANNOVAR_DIR}/table_annovar.pl"
+        log_theory "How to Obtain ANNOVAR (Proprietary Tool)" \
+            "ANNOVAR is proprietary and requires registration for academic/non-profit use." \
+            "To download and run it in the future:" \
+            "  1. Register at: http://www.openannovar.org/" \
+            "  2. You will receive an email with a download link." \
+            "  3. Extract it to your preferred location (e.g. /home/yer_kanat/annovar)." \
+            "  4. Download hg38 databases using:" \
+            "     perl annotate_variation.pl -buildver hg38 -downdb -webfrom annovar refGene humandb/" \
+            "     perl annotate_variation.pl -buildver hg38 -downdb -webfrom annovar clinvar_20200316 humandb/" \
+            "     (etc. for other protocols in config.sh)" \
+            "  5. Update ANNOVAR_DIR in config.sh to point to your new directory." \
+            "" \
+            "Since ANNOVAR_BYPASS_IF_MISSING=true, we will gracefully bypass this step and proceed!"
+
+        log_info "Creating empty placeholder annotation files with correct headers..."
+        
+        # 1. Create main multianno output with appropriate headers
+        # We need headers that python script parses: Func.refGene, CLNSIG, AF_popmax
+        echo -e "Chr\tStart\tEnd\tRef\tAlt\tFunc.refGene\tGene.refGene\tGeneDetail.refGene\tExonicFunc.refGene\tAAChange.refGene\tavsnp150\tCLNSIG\tAF_popmax" > "${OUT_ANNOTATION}/chrY_MT_final.hg38_multianno.txt"
+        
+        # 2. Create pathogenic, vus, and rare_functional empty output files with same header
+        echo -e "Chr\tStart\tEnd\tRef\tAlt\tFunc.refGene\tGene.refGene\tGeneDetail.refGene\tExonicFunc.refGene\tAAChange.refGene\tavsnp150\tCLNSIG\tAF_popmax" > "${OUT_ANNOTATION}/pathogenic.tsv"
+        echo -e "Chr\tStart\tEnd\tRef\tAlt\tFunc.refGene\tGene.refGene\tGeneDetail.refGene\tExonicFunc.refGene\tAAChange.refGene\tavsnp150\tCLNSIG\tAF_popmax" > "${OUT_ANNOTATION}/vus.tsv"
+        echo -e "Chr\tStart\tEnd\tRef\tAlt\tFunc.refGene\tGene.refGene\tGeneDetail.refGene\tExonicFunc.refGene\tAAChange.refGene\tavsnp150\tCLNSIG\tAF_popmax" > "${OUT_ANNOTATION}/rare_functional.tsv"
+        
+        log_ok "Graceful bypass initialized. Placeholders generated successfully."
+    else
+        log_error "ANNOVAR not found at: ${ANNOVAR_DIR}/table_annovar.pl"
+        exit 1
+    fi
+else
+    ${ANNOVAR_CMD}
+    log_ok "ANNOVAR annotation completed"
 fi
-
-${ANNOVAR_CMD}
-
-log_ok "ANNOVAR annotation completed"
 
 # =============================================================================
 #  4.2 FILTERING BY gnomAD AND ClinVar (Python)

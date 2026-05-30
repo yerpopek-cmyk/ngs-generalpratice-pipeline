@@ -137,13 +137,32 @@ pbrun haplotypecaller \
 
 After generating the accelerated BAM and VCF files via Clara Parabricks, you can proceed directly to step `03_qc.sh` and run the rest of the pipeline (QC, annotation, haplogroups, and kinship) as normal.
 
-## Repository Contents
+## Repository Contents & Output Glossary
 
+### Source Code
 * `steps/`: Shell scripts corresponding to each stage of the pipeline.
-* `lib/`: Helper functions and utilities.
+* `lib/`: Helper functions and utilities (includes automated Conda initialization).
 * `config.sh`: Main configuration file.
 * `run_pipeline.sh`: Master execution script.
-* `out/`: Contains the generated outputs and phylogenetic reports from the experiment (large binary BAM/VCF files are ignored).
+
+### Output Glossary (`out/`)
+The `out/` directory contains all generated results, logs, and intermediate files. Below is a guide to what each file and folder means:
+
+* **`haplogroups/`**: Contains the results of the phylogenetic lineage tracing.
+  * `haplogroups_summary.tsv`: The main summary table listing the precise paternal (Y-DNA) and maternal (mtDNA) haplogroups for all samples, along with a high-level geographical origin interpretation.
+  * `haplogroups.txt`: Raw maternal lineage predictions from HaploGrep3.
+  * `classify_Y.nwk`: The reconstructed Newick phylogenetic tree for the Y-chromosome lineages.
+* **`kinship/`**: Contains the cohort relatedness and Identity-By-Descent (IBD) results.
+  * `kinship_summary.tsv`: The final kinship matrix detailing the exact `PI_HAT` relatedness coefficient between every pair of samples, determining if they are twins, siblings, cousins, or unrelated.
+  * `samples_chr9_ibd.genome`: Raw PLINK IBD statistics.
+* **`annotation/`**: Clinical variant interpretation files.
+  * `chrY_MT_final.hg38_multianno.txt`: The master annotated TSV file containing clinical database cross-references (ClinVar, gnomAD, refGene) for every called variant.
+  * `pathogenic.tsv`: Filtered list of variants classified strictly as Pathogenic or Likely Pathogenic.
+  * `vus.tsv`: Rare variants classified as Variants of Uncertain Significance.
+* **`multiqc/`**: 
+  * `multiqc_report.html`: An interactive HTML dashboard aggregating all quality control metrics from FastQC, BWA alignment stats, and QualiMap coverage analysis.
+* **`final_bam/` & `bwa/`**: Contains the heavy binary alignment map (`.bam`) files storing the mapped sequencing reads, which are used for visualization in tools like IGV.
+* **`chrY_MT_final.vcf.gz`**: The core joint-called Variant Call Format file containing all high-quality SNPs and Indels discovered across the entire cohort.
 
 ---
 

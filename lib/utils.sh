@@ -5,6 +5,17 @@
 #  Sourced via: source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
 # =============================================================================
 
+# --- CONDA INITIALIZATION ----------------------------------------------------
+# Ensure Conda is available in non-interactive/non-login shells
+if ! command -v conda &>/dev/null; then
+    if [[ -f "/home/yer_kanat/miniconda3/etc/profile.d/conda.sh" ]]; then
+        source "/home/yer_kanat/miniconda3/etc/profile.d/conda.sh"
+    elif [[ -f "/home/prep01/miniconda3/etc/profile.d/conda.sh" ]]; then
+        source "/home/prep01/miniconda3/etc/profile.d/conda.sh"
+    fi
+fi
+
+
 # --- COLORS AND FORMATTING --------------------------------------------------
 # Use tput for cross-terminal compatibility
 if [[ -t 1 ]] && command -v tput &>/dev/null; then

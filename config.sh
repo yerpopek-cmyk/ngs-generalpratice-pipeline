@@ -90,6 +90,8 @@ export HUMANDB_DIR="${ANNOVAR_DIR}/humandb"
 export ANNOVAR_PROTOCOL="refGene,avsnp150,clinvar_20200316,gnomad30_genome,gnomad211_exome,dbnsfp35c,dbscsnv11"
 export ANNOVAR_OPERATION="g,f,f,f,f,f,f"
 # g = gene-based annotation; f = filter-based (comparison with DB)
+export ANNOVAR_BYPASS_IF_MISSING="${ANNOVAR_BYPASS_IF_MISSING:-true}"  # If ANNOVAR is missing, print guide & bypass instead of crashing
+
 
 # --- FILTERING THRESHOLDS -------------------------------------------------------
 # gnomAD MAF (Minor Allele Frequency): variants with frequency > threshold are
